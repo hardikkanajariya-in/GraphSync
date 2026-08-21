@@ -46,9 +46,14 @@ Use clear, descriptive commit messages:
 
 Before opening a pull request:
 
+- GitHub Actions runs a Rust compile check on Ubuntu (`cargo check`) — no website or desktop bundle is built in CI.
+- Desktop release builds (Windows + macOS `.dmg`) run only in the Release workflow when a `v*` tag is pushed.
+- Website changes are validated by Vercel preview/production deploys.
+
+If you are changing the desktop app locally:
+
 ```bash
-pnpm build
-pnpm tauri build
+cargo check --manifest-path src-tauri/Cargo.toml
 ```
 
 CI also runs on pull requests automatically.
@@ -58,8 +63,8 @@ CI also runs on pull requests automatically.
 Maintainers create releases by pushing a version tag:
 
 ```bash
-git tag v0.1.0
-git push origin v0.1.0
+git tag v1.0.0
+git push origin v1.0.0
 ```
 
 GitHub Actions builds Windows and macOS installers and publishes them to GitHub Releases.

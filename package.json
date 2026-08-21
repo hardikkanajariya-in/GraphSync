@@ -14,8 +14,7 @@
     "build:website": "pnpm --filter graphsync-website build",
     "preview": "vite preview",
     "preview:website": "pnpm --filter graphsync-website preview",
-    "tauri": "tauri",
-    "check": "pnpm build && pnpm build:website"
+    "tauri": "tauri"
   },
   "dependencies": {
     "@tauri-apps/api": "^2",

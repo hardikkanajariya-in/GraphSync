@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Release version (for example 0.1.0)"
+        description: "Release version (for example 1.0.0)"
         required: true
         default: "1.0.0"
       prerelease:
@@ -83,6 +83,10 @@ jobs:
 
     runs-on: ${{ matrix.platform }}
 
+    env:
+      MACOSX_DEPLOYMENT_TARGET: "10.15"
+      CI: true
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -108,7 +112,7 @@ jobs:
         with:
           workspaces: src-tauri
 
-      - name: Install frontend dependencies
+      - name: Install desktop UI dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Sync release version
@@ -149,7 +153,7 @@ jobs:
           );
           NODE
 
-      - name: Build and upload release artifacts
+      - name: Build and upload desktop release
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -177,7 +181,7 @@ jobs:
             - **macOS**: open the `.dmg`, drag GraphSync to Applications, then launch it.
             - These are unsigned community builds. Windows SmartScreen and macOS Gatekeeper may show a warning on first install.
 
-            See the [README](https://github.com/${{ github.repository }}/blob/main/README.md) for setup instructions.
+            The docs site is deployed separately on Vercel. See the [README](https://github.com/${{ github.repository }}/blob/main/README.md) for setup instructions.
           releaseDraft: false
           prerelease: ${{ needs.prepare.outputs.prerelease }}
           includeUpdaterJson: true

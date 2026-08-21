@@ -2,6 +2,8 @@
 
 GraphSync desktop releases are built automatically by GitHub Actions.
 
+The docs site is deployed separately by Vercel on push to the connected branch. GitHub Actions does not build the website.
+
 ## Automatic release on tag push
 
 1. Update the version in:

@@ -20,11 +20,11 @@ pnpm dev:website      # docs site at http://localhost:5173
 pnpm build:website    # production build -> website/dist
 ```
 
-Deploy to Vercel from the repository root — [`vercel.json`](vercel.json) is already configured.
+Deploy to Vercel from the repository root — [`vercel.json`](vercel.json) is already configured. Vercel builds and deploys the website automatically on push; GitHub Actions does not build the website.
 
 ## Download
 
-Prebuilt installers are published on [GitHub Releases](https://github.com/hardikkanajariya-in/GraphSync/releases).
+Prebuilt desktop installers are built in GitHub Actions and published on [GitHub Releases](https://github.com/hardikkanajariya-in/GraphSync/releases). You do not need Rust or a local build toolchain to install GraphSync.
 
 | Platform | Download |
 | --- | --- |
@@ -71,33 +71,37 @@ pnpm install
 
 ## Development
 
-Start the desktop app:
+Contributors who change the desktop app need Rust and the Tauri prerequisites from the [Tauri docs](https://v2.tauri.app/start/prerequisites/). End users and website-only changes do not.
+
+Start the desktop app locally:
 
 ```bash
 pnpm tauri dev
 ```
 
-Frontend only:
+Frontend only (desktop UI shell):
 
 ```bash
 pnpm dev
 ```
 
-## Build
-
-Production frontend bundle:
+Website locally:
 
 ```bash
-pnpm build
+pnpm dev:website
 ```
 
-Desktop bundles (.exe on Windows, .app on macOS):
+## Build
+
+Desktop installers for Windows and macOS are built only in GitHub Actions when you push a release tag such as `v1.0.0`. See [`.github/RELEASE.md`](.github/RELEASE.md).
+
+The website is built and deployed by Vercel, not by GitHub Actions.
+
+If you are developing the desktop app locally, production bundles are written to `src-tauri/target/release/bundle/` after:
 
 ```bash
 pnpm tauri build
 ```
-
-Artifacts are written to `src-tauri/target/release/bundle/`.
 
 ## First run
 
