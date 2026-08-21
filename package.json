@@ -8,8 +8,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:website": "pnpm --filter graphsync-website dev",
     "build": "tsc && vite build",
+    "build:website": "pnpm --filter graphsync-website build",
     "preview": "vite preview",
+    "preview:website": "pnpm --filter graphsync-website preview",
     "tauri": "tauri"
   },
   "dependencies": {

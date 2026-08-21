@@ -12,7 +12,15 @@ Files remain on your devices. The API stores coordination metadata only.
 
 ## Product site & docs
 
-The public landing page and reader-friendly documentation live in [`website/`](website/). Deploy that folder to Vercel for a hosted product site and explorable docs.
+The public landing page and documentation live in [`website/`](website/). The repo uses a single pnpm workspace with one shared `node_modules` at the root.
+
+```bash
+pnpm install
+pnpm dev:website      # docs site at http://localhost:5173
+pnpm build:website    # production build -> website/dist
+```
+
+Deploy to Vercel from the repository root — [`vercel.json`](vercel.json) is already configured.
 
 ## Download
 
@@ -56,6 +64,8 @@ See [docs/API_CONTRACT.md](docs/API_CONTRACT.md) for the server protocol.
 - Platform dependencies for Tauri 2: https://tauri.app/start/prerequisites/
 
 ## Installation
+
+From the repository root (desktop app + website share one workspace install):
 
 ```bash
 pnpm install
