@@ -23,6 +23,13 @@ pnpm dev
 
 ## Deploy to Vercel
 
-Import the repository in Vercel and deploy from the **repository root**.
+Deploy to Vercel from the **repository root** (leave Root Directory empty in project settings).
 
-The root [`vercel.json`](../vercel.json) handles install, build, output directory, and SPA routing automatically. No separate root directory setting is required.
+The root [`vercel.json`](../vercel.json) runs:
+
+```bash
+pnpm install
+pnpm --filter graphsync-website build
+```
+
+If your Vercel project uses **Root Directory = `website`**, the local [`vercel.json`](vercel.json) in this folder is used instead.

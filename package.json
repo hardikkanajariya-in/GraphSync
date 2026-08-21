@@ -5,6 +5,7 @@
   "description": "Lightweight P2P folder synchronization desktop client",
   "author": "Hardik Kanajariya <https://hardikkanajariya.in>",
   "license": "MIT",
+  "packageManager": "pnpm@9.15.9",
   "type": "module",
   "scripts": {
     "dev": "vite",
