@@ -322,7 +322,8 @@ impl PeerManager {
                     };
 
                     if let Ok(request) = serde_json::from_str::<FileRequestMessage>(text) {
-                        if let Some(folder) = config.read().sync_folder.clone() {
+                        let folder_opt = config.read().sync_folder.clone();
+                        if let Some(folder) = folder_opt {
                             if let Ok(full) =
                                 filesystem::resolve_safe_path(Path::new(&folder), &request.path)
                             {
