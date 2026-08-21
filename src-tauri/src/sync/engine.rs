@@ -5,7 +5,7 @@ use std::time::Duration;
 
 use anyhow::{Context, Result};
 use notify::RecursiveMode;
-use notify_debouncer_full::{new_debouncer, DebounceEventResult, Debouncer, NoCache};
+use notify_debouncer_full::{new_debouncer, DebounceEventResult, Debouncer, RecommendedCache};
 use parking_lot::{Mutex as SyncMutex, RwLock};
 use tauri::{AppHandle, Emitter};
 use tokio::sync::{mpsc, Mutex};
@@ -45,7 +45,7 @@ pub struct SyncEngine {
     app: AppHandle,
     status: Arc<RwLock<SyncStatus>>,
     retry_queue: Arc<Mutex<VecDeque<SyncEvent>>>,
-    watcher: SyncMutex<Option<Debouncer<notify::RecommendedWatcher, NoCache>>>,
+    watcher: SyncMutex<Option<Debouncer<notify::RecommendedWatcher, RecommendedCache>>>,
     pub shutdown: tokio::sync::watch::Sender<bool>,
 }
 
