@@ -38,15 +38,29 @@ jobs:
         id: meta
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            VERSION="${{ github.event.inputs.version }}"
-            TAG="v${VERSION#v}"
+            RAW_VERSION="${{ github.event.inputs.version }}"
             PRERELEASE="${{ github.event.inputs.prerelease }}"
           else
-            TAG="${GITHUB_REF_NAME}"
-            VERSION="${TAG#v}"
+            RAW_VERSION="${GITHUB_REF_NAME#v}"
             PRERELEASE="false"
           fi
 
+          VERSION="$(node -e "
+            const raw = process.argv[1];
+            const parts = raw.split('.').filter((part) => part !== '');
+            if (parts.length === 0 || parts.some((part) => !/^\d+$/.test(part))) {
+              console.error('Version must be numeric semver, for example 1.0.0');
+              process.exit(1);
+            }
+            while (parts.length < 3) {
+              parts.push('0');
+            }
+            process.stdout.write(parts.slice(0, 3).join('.'));
+          " "$RAW_VERSION")"
+
+          TAG="v${VERSION}"
+
+          echo "Resolved release version: ${VERSION} (${TAG})"
           echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
           echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
           echo "prerelease=${PRERELEASE}" >> "$GITHUB_OUTPUT"
@@ -123,10 +137,18 @@ jobs:
           node <<'NODE'
           const fs = require('fs');
 
-          const version = process.env.VERSION;
-          if (!version) {
-            throw new Error('VERSION is required');
+          function normalizeSemver(raw) {
+            const parts = raw.split('.').filter((part) => part !== '');
+            if (parts.length === 0 || parts.some((part) => !/^\d+$/.test(part))) {
+              throw new Error(`Invalid version "${raw}". Use semver like 1.0.0`);
+            }
+            while (parts.length < 3) {
+              parts.push('0');
+            }
+            return parts.slice(0, 3).join('.');
           }
+
+          const version = normalizeSemver(process.env.VERSION || '');
 
           const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
           pkg.version = version;

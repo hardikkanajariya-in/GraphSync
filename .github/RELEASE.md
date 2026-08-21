@@ -19,6 +19,8 @@ git tag v1.0.0
 git push origin v1.0.0
 ```
 
+Use full semver tags such as `v1.0.0`. Tags like `v0.1` are normalized to `0.1.0` automatically, but `v1.0.0` is clearer.
+
 The [Release workflow](.github/workflows/release.yml) builds:
 
 - Windows x64 installer (`.msi` / `.exe`)
