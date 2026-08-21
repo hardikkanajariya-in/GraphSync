@@ -74,7 +74,7 @@ jobs:
             echo "Tag already exists: ${{ steps.meta.outputs.tag }}"
           else
             git tag "${{ steps.meta.outputs.tag }}"
-            git push origin "${{ steps.meta.outputs.tag }}"
+            git push origin "${{ steps.meta.outputs.tag }}" || echo "Tag creation on origin skipped (handled by release step)"
           fi
 
   build:
