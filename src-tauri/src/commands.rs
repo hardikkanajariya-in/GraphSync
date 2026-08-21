@@ -75,7 +75,7 @@ pub async fn save_setup(
         save_config(&config).map_err(|e| e.to_string())?;
     }
 
-    start_sync_internal(app, state).await?;
+    start_sync_internal(app, state.clone()).await?;
     Ok(public_config(&state.config.read()))
 }
 
@@ -148,10 +148,11 @@ pub async fn update_settings(
 #[tauri::command]
 pub async fn reset_device(state: State<'_, AppState>) -> Result<PublicConfig, String> {
     let api = ApiClient::new(state.config.clone());
-    let mut config = state.config.write();
+    let mut config = state.config.read().clone();
     device::reset_device_identity(&mut config, &api)
         .await
         .map_err(|e| e.to_string())?;
+    *state.config.write() = config.clone();
     Ok(public_config(&config))
 }
 

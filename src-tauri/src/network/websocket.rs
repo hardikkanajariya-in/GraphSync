@@ -4,7 +4,7 @@ use anyhow::Result;
 use futures_util::{SinkExt, StreamExt};
 use parking_lot::RwLock;
 use tokio_tungstenite::{connect_async, tungstenite::Message};
-use tracing::{error, info, warn};
+use tracing::{info, warn};
 
 use crate::config::Config;
 use crate::network::api::ApiClient;

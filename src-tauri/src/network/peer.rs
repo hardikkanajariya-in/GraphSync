@@ -3,7 +3,7 @@ use std::io::Read;
 use std::path::Path;
 use std::sync::Arc;
 
-use anyhow::{Context, Result};
+use anyhow::Result;
 use bytes::Bytes;
 use parking_lot::RwLock;
 use tokio::sync::{Mutex, oneshot};
@@ -316,7 +316,12 @@ impl PeerManager {
             let dc = dc.clone();
             Box::pin(async move {
                 if msg.is_string {
-                    if let Ok(request) = serde_json::from_str::<FileRequestMessage>(&msg.data) {
+                    let text = match std::str::from_utf8(&msg.data) {
+                        Ok(text) => text,
+                        Err(_) => return,
+                    };
+
+                    if let Ok(request) = serde_json::from_str::<FileRequestMessage>(text) {
                         if let Some(folder) = config.read().sync_folder.clone() {
                             if let Ok(full) =
                                 filesystem::resolve_safe_path(Path::new(&folder), &request.path)
@@ -341,7 +346,7 @@ impl PeerManager {
                         return;
                     }
 
-                    if msg.data == "EOF" {
+                    if text == "EOF" {
                         let data = buffer.lock().await.clone();
                         if !request_key.is_empty() {
                             if let Some(sender) = pending.lock().await.remove(&request_key) {

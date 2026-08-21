@@ -6,7 +6,7 @@ use std::time::Duration;
 use anyhow::{Context, Result};
 use notify::RecursiveMode;
 use notify_debouncer_full::{new_debouncer, DebounceEventResult, Debouncer, FileIdMap};
-use parking_lot::RwLock;
+use parking_lot::{Mutex as SyncMutex, RwLock};
 use tauri::{AppHandle, Emitter};
 use tokio::sync::{mpsc, Mutex};
 use tracing::{error, info, warn};
@@ -45,7 +45,7 @@ pub struct SyncEngine {
     app: AppHandle,
     status: Arc<RwLock<SyncStatus>>,
     retry_queue: Arc<Mutex<VecDeque<SyncEvent>>>,
-    watcher: Mutex<Option<Debouncer<notify::RecommendedWatcher, FileIdMap>>>,
+    watcher: SyncMutex<Option<Debouncer<notify::RecommendedWatcher, FileIdMap>>>,
     pub shutdown: tokio::sync::watch::Sender<bool>,
 }
 
@@ -79,7 +79,7 @@ impl SyncEngine {
                 failed_events: 0,
             })),
             retry_queue: Arc::new(Mutex::new(VecDeque::new())),
-            watcher: Mutex::new(None),
+            watcher: SyncMutex::new(None),
             shutdown,
         })
     }
@@ -120,23 +120,27 @@ impl SyncEngine {
             };
         });
 
-        let mut config = self.config.write();
-        device::ensure_registered(&mut config, &self.api).await?;
-        drop(config);
+        {
+            let mut config = self.config.read().clone();
+            device::ensure_registered(&mut config, &self.api).await?;
+            *self.config.write() = config;
+        }
 
-        let graph_id = {
-            let mut config = self.config.write();
-            if config.graph_id.is_none() {
-                let graph = self
-                    .api
-                    .register_graph(&config.device_id, &folder)
-                    .await?;
-                config.graph_id = Some(graph.graph_id.clone());
+        let graph_id = if self.config.read().graph_id.is_some() {
+            self.config.read().graph_id.clone().unwrap()
+        } else {
+            let device_id = self.config.read().device_id.clone();
+            let graph = self
+                .api
+                .register_graph(&device_id, &folder)
+                .await?;
+            let graph_id = graph.graph_id.clone();
+            {
+                let mut config = self.config.write();
+                config.graph_id = Some(graph_id.clone());
                 crate::config::save_config(&config)?;
-                graph.graph_id
-            } else {
-                config.graph_id.clone().unwrap()
             }
+            graph_id
         };
 
         {
@@ -457,7 +461,8 @@ impl SyncEngine {
                 if *engine.shutdown.borrow() {
                     break;
                 }
-                if engine.config.read().paused {
+                let paused = engine.config.read().paused;
+                if paused {
                     tokio::time::sleep(Duration::from_secs(2)).await;
                     continue;
                 }
@@ -470,7 +475,8 @@ impl SyncEngine {
                     }
                 }
 
-                if let Some(graph_id) = engine.config.read().graph_id.clone() {
+                let graph_id = engine.config.read().graph_id.clone();
+                if let Some(graph_id) = graph_id {
                     match engine.api.get_sync_events(&graph_id, None).await {
                         Ok(events) => {
                             for event in events {
