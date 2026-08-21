@@ -4,17 +4,6 @@ on:
   push:
     tags:
       - "v*"
-  workflow_dispatch:
-    inputs:
-      version:
-        description: "Release version (for example 1.0.0)"
-        required: true
-        default: "1.0.0"
-      prerelease:
-        description: "Mark as pre-release"
-        required: false
-        type: boolean
-        default: false
 
 concurrency:
   group: release-${{ github.workflow }}-${{ github.ref }}
@@ -37,16 +26,14 @@ jobs:
       - name: Resolve release metadata
         id: meta
         run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            RAW_VERSION="${{ github.event.inputs.version }}"
-            PRERELEASE="${{ github.event.inputs.prerelease }}"
-          else
-            RAW_VERSION="${GITHUB_REF_NAME#v}"
-            PRERELEASE="false"
+          RAW_VERSION="${GITHUB_REF_NAME#v}"
+          PRERELEASE="false"
+          if [[ "$GITHUB_REF_NAME" == *"-"* ]]; then
+            PRERELEASE="true"
           fi
 
           VERSION="$(node -e "
-            const raw = process.argv[1];
+            const raw = process.argv[1].split('-')[0];
             const parts = raw.split('.').filter((part) => part !== '');
             if (parts.length === 0 || parts.some((part) => !/^\d+$/.test(part))) {
               console.error('Version must be numeric semver, for example 1.0.0');
@@ -58,24 +45,12 @@ jobs:
             process.stdout.write(parts.slice(0, 3).join('.'));
           " "$RAW_VERSION")"
 
-          TAG="v${VERSION}"
+          TAG="${GITHUB_REF_NAME}"
 
           echo "Resolved release version: ${VERSION} (${TAG})"
           echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
           echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
           echo "prerelease=${PRERELEASE}" >> "$GITHUB_OUTPUT"
-
-      - name: Create release tag for manual dispatch
-        if: github.event_name == 'workflow_dispatch'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if git rev-parse "${{ steps.meta.outputs.tag }}" >/dev/null 2>&1; then
-            echo "Tag already exists: ${{ steps.meta.outputs.tag }}"
-          else
-            git tag "${{ steps.meta.outputs.tag }}"
-            git push origin "${{ steps.meta.outputs.tag }}" || echo "Tag creation on origin skipped (handled by release step)"
-          fi
 
   build:
     needs: prepare
