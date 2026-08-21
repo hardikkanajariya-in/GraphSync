@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { open } from "@tauri-apps/plugin-dialog";
+import { saveSetup } from "../lib/tauri";
 
 interface SetupPageProps {
   onComplete: () => void;
@@ -24,7 +25,6 @@ export function SetupPage({ onComplete }: SetupPageProps) {
     setError(null);
     setLoading(true);
     try {
-      const { saveSetup } = await import("../lib/tauri");
       await saveSetup(
         apiUrl,
         syncFolder,

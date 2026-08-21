@@ -1,7 +1,7 @@
 {
   "name": "graphsync",
   "private": true,
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Lightweight P2P folder synchronization desktop client",
   "author": "Hardik Kanajariya <https://hardikkanajariya.in>",
   "license": "MIT",
@@ -14,7 +14,8 @@
     "build:website": "pnpm --filter graphsync-website build",
     "preview": "vite preview",
     "preview:website": "pnpm --filter graphsync-website preview",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "check": "pnpm build && pnpm build:website"
   },
   "dependencies": {
     "@tauri-apps/api": "^2",
@@ -30,7 +31,7 @@
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^6.0.5",
     "tailwindcss": "^4.1.11",
-    "typescript": "~7.0.2",
-    "vite": "^8.2.1"
+    "typescript": "~5.8.3",
+    "vite": "^7.0.4"
   }
 }

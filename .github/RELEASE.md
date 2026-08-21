@@ -6,14 +6,15 @@ GraphSync desktop releases are built automatically by GitHub Actions.
 
 1. Update the version in:
    - `package.json`
+   - `website/package.json`
    - `src-tauri/tauri.conf.json`
    - `src-tauri/Cargo.toml`
-2. Commit the version bump
+2. Commit the version bump and update `CHANGELOG.md`
 3. Create and push a tag:
 
 ```bash
-git tag v0.1.0
-git push origin v0.1.0
+git tag v1.0.0
+git push origin v1.0.0
 ```
 
 The [Release workflow](.github/workflows/release.yml) builds:
@@ -28,7 +29,7 @@ Artifacts are attached to the GitHub Release for the tag.
 
 Maintainers can also run the workflow from the GitHub Actions tab using **Run workflow**.
 
-Provide a version such as `0.1.0`. The workflow creates the `v0.1.0` tag if it does not already exist.
+Provide a version such as `1.0.0`. The workflow creates the `v1.0.0` tag if it does not already exist.
 
 ## Notes
 

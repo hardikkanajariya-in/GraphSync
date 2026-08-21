@@ -196,9 +196,7 @@ impl SyncEngine {
             },
         )?;
 
-        debouncer
-            .watcher()
-            .watch(&root, RecursiveMode::Recursive)?;
+        debouncer.watch(&root, RecursiveMode::Recursive)?;
 
         tokio::spawn(async move {
             while let Some(result) = rx.recv().await {

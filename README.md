@@ -1,7 +1,7 @@
 # GraphSync
 
-[![CI](https://github.com/graphsync/graphsync/actions/workflows/ci.yml/badge.svg)](https://github.com/graphsync/graphsync/actions/workflows/ci.yml)
-[![Release](https://github.com/graphsync/graphsync/actions/workflows/release.yml/badge.svg)](https://github.com/graphsync/graphsync/actions/workflows/release.yml)
+[![CI](https://github.com/hardikkanajariya-in/GraphSync/actions/workflows/ci.yml/badge.svg)](https://github.com/hardikkanajariya-in/GraphSync/actions/workflows/ci.yml)
+[![Release](https://github.com/hardikkanajariya-in/GraphSync/actions/workflows/release.yml/badge.svg)](https://github.com/hardikkanajariya-in/GraphSync/actions/workflows/release.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 **Author & maintainer:** [Hardik Kanajariya](https://hardikkanajariya.in)
@@ -24,7 +24,7 @@ Deploy to Vercel from the repository root — [`vercel.json`](vercel.json) is al
 
 ## Download
 
-Prebuilt installers are published on [GitHub Releases](https://github.com/graphsync/graphsync/releases).
+Prebuilt installers are published on [GitHub Releases](https://github.com/hardikkanajariya-in/GraphSync/releases).
 
 | Platform | Download |
 | --- | --- |
@@ -32,9 +32,7 @@ Prebuilt installers are published on [GitHub Releases](https://github.com/graphs
 | macOS Apple Silicon | `.dmg` built for `aarch64-apple-darwin` |
 | macOS Intel | `.dmg` built for `x86_64-apple-darwin` |
 
-Releases are created automatically when a version tag such as `v0.1.0` is pushed to GitHub.
-
-If you are forking this repository, replace `graphsync/graphsync` in the README badges and release links with your GitHub organization and repository name.
+Releases are created automatically when a version tag such as `v1.0.0` is pushed to GitHub.
 
 ## Architecture
 
@@ -189,6 +187,7 @@ The WebRTC implementation is real (`webrtc-rs`), but end-to-end sync against pro
 
 ## Community
 
+- [Changelog](CHANGELOG.md)
 - [Authors](AUTHORS.md)
 - [Contributing guide](CONTRIBUTING.md)
 - [Code of conduct](CODE_OF_CONDUCT.md)

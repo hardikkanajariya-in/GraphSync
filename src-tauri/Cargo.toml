@@ -1,6 +1,6 @@
 [package]
 name = "graphsync"
-version = "0.1.0"
+version = "1.0.0"
 description = "Lightweight P2P folder synchronization client"
 authors = ["Hardik Kanajariya <https://hardikkanajariya.in>"]
 edition = "2021"
@@ -33,11 +33,10 @@ chrono = { version = "0.4", features = ["serde"] }
 thiserror = "2"
 anyhow = "1"
 bytes = "1"
-webrtc = "0.20"
+webrtc = "0.13"
 async-trait = "0.1"
 parking_lot = "0.12"
 dirs = "6"
 hostname = "0.4"
 url = "2"
-base64 = "0.23"
 hex = "0.4"

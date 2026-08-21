@@ -13,6 +13,6 @@ export const PRODUCT = {
 
 export const LINKS = {
   docs: "/docs",
-  github: "https://github.com/graphsync/graphsync",
-  releases: "https://github.com/graphsync/graphsync/releases",
+  github: "https://github.com/hardikkanajariya-in/GraphSync",
+  releases: "https://github.com/hardikkanajariya-in/GraphSync/releases",
 };

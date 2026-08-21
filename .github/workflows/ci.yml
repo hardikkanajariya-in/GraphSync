@@ -22,7 +22,7 @@ jobs:
 
       - uses: pnpm/action-setup@v4
         with:
-          version: 9
+          version: 9.15.9
 
       - uses: actions/setup-node@v4
         with:
@@ -32,8 +32,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Typecheck and build frontend
-        run: pnpm build
+      - name: Build desktop UI and website
+        run: pnpm check
 
   rust:
     runs-on: ubuntu-latest
@@ -51,7 +51,7 @@ jobs:
 
       - uses: pnpm/action-setup@v4
         with:
-          version: 9
+          version: 9.15.9
 
       - uses: actions/setup-node@v4
         with:
