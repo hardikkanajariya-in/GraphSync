@@ -257,7 +257,6 @@ impl PeerManager {
                     session_id.clone(),
                     Arc::new(PeerSession {
                         pc,
-                        session_id,
                     }),
                 );
             }

@@ -4,7 +4,6 @@ use anyhow::Result;
 use chrono::Utc;
 
 use crate::filesystem;
-use crate::sync::events::FileOperation;
 
 pub fn conflict_copy_path(original: &Path, device_name: &str) -> PathBuf {
     let stem = original
