@@ -187,7 +187,7 @@ impl SyncEngine {
         Ok(())
     }
 
-    fn start_watcher(&self, folder: String) -> Result<()> {
+    fn start_watcher(self: &Arc<Self>, folder: String) -> Result<()> {
         let engine = self.clone();
         let root = PathBuf::from(folder.clone());
         let (tx, mut rx) = mpsc::unbounded_channel();
@@ -202,6 +202,7 @@ impl SyncEngine {
 
         debouncer.watch(&root, RecursiveMode::Recursive)?;
 
+        let watch_folder = folder.clone();
         tokio::spawn(async move {
             while let Some(result) = rx.recv().await {
                 if *engine.shutdown.borrow() {
@@ -211,7 +212,7 @@ impl SyncEngine {
                 if cfg.paused || !cfg.enabled {
                     continue;
                 }
-                if let Err(err) = engine.handle_watch_result(&folder, result).await {
+                if let Err(err) = engine.handle_watch_result(&watch_folder, result).await {
                     error!(error = %err, "filesystem watch handling failed");
                 }
             }

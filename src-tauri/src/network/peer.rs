@@ -308,12 +308,13 @@ impl PeerManager {
         request_key: String,
     ) {
         let config_for_handler = config.clone();
+        let dc_for_handler = dc.clone();
         dc.on_message(Box::new(move |msg| {
             let config = config_for_handler.clone();
             let buffer = buffer.clone();
             let pending = pending_requests.clone();
             let request_key = request_key.clone();
-            let dc = dc.clone();
+            let dc = dc_for_handler.clone();
             Box::pin(async move {
                 if msg.is_string {
                     let text = match std::str::from_utf8(&msg.data) {
