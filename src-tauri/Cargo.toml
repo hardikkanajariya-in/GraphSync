@@ -33,7 +33,7 @@ chrono = { version = "0.4", features = ["serde"] }
 thiserror = "2"
 anyhow = "1"
 bytes = "1"
-webrtc = "0.13"
+webrtc = "0.20"
 async-trait = "0.1"
 parking_lot = "0.12"
 dirs = "6"
