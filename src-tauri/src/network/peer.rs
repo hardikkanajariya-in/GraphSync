@@ -37,7 +37,6 @@ pub struct PeerManager {
 
 struct PeerSession {
     pc: Arc<RTCPeerConnection>,
-    session_id: String,
 }
 
 impl PeerManager {
@@ -184,10 +183,9 @@ impl PeerManager {
             .await?;
 
         self.sessions.lock().await.insert(
-            session_id.clone(),
+            session_id,
             Arc::new(PeerSession {
                 pc: pc.clone(),
-                session_id,
             }),
         );
 

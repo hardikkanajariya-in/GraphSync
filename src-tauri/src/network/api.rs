@@ -252,32 +252,6 @@ impl ApiClient {
         Ok(())
     }
 
-    pub async fn post_signaling_ice(
-        &self,
-        session_id: &str,
-        candidate: &str,
-        sdp_mid: Option<&str>,
-        sdp_mline_index: Option<u16>,
-    ) -> Result<()> {
-        let url = format!("{}/signaling/ice", self.base_url()?);
-        let payload = serde_json::json!({
-            "session_id": session_id,
-            "candidate": candidate,
-            "sdp_mid": sdp_mid,
-            "sdp_mline_index": sdp_mline_index,
-            "protocol_version": crate::config::PROTOCOL_VERSION,
-        });
-        let response = self
-            .http
-            .post(url)
-            .header("Authorization", self.auth_header()?)
-            .json(&payload)
-            .send()
-            .await?;
-        Self::json::<serde_json::Value>(response).await?;
-        Ok(())
-    }
-
     pub async fn get_devices(&self) -> Result<Vec<DeviceInfo>> {
         let url = format!("{}/devices", self.base_url()?);
         let response = self

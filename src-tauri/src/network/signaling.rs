@@ -30,10 +30,3 @@ pub struct FileRequestMessage {
     pub path: String,
     pub sha256: String,
 }
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct FileCompleteMessage {
-    pub path: String,
-    pub sha256: String,
-    pub size: u64,
-}

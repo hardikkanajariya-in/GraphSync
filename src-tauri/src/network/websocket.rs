@@ -2,26 +2,22 @@ use std::sync::Arc;
 
 use anyhow::Result;
 use futures_util::{SinkExt, StreamExt};
-use parking_lot::RwLock;
 use tokio_tungstenite::{connect_async, tungstenite::Message};
 use tracing::{info, warn};
 
-use crate::config::Config;
 use crate::network::api::ApiClient;
 use crate::network::signaling::SignalingMessage;
 use crate::sync::engine::SyncEngine;
 use crate::sync::events::SyncEvent;
 
 pub struct WebSocketClient {
-    config: Arc<RwLock<Config>>,
     api: Arc<ApiClient>,
     connected: Arc<tokio::sync::Mutex<bool>>,
 }
 
 impl WebSocketClient {
-    pub fn new(config: Arc<RwLock<Config>>, api: Arc<ApiClient>) -> Self {
+    pub fn new(api: Arc<ApiClient>) -> Self {
         Self {
-            config,
             api,
             connected: Arc::new(tokio::sync::Mutex::new(false)),
         }
@@ -92,6 +88,7 @@ impl WebSocketClient {
         Ok(())
     }
 
+    #[allow(dead_code)]
     pub async fn disconnect(&self) {
         *self.connected.lock().await = false;
     }

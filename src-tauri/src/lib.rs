@@ -2,7 +2,6 @@ mod commands;
 mod config;
 mod device;
 mod filesystem;
-mod hashing;
 mod network;
 mod sync;
 mod tray;

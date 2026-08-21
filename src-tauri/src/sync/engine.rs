@@ -49,6 +49,7 @@ pub struct SyncEngine {
     pub shutdown: tokio::sync::watch::Sender<bool>,
 }
 
+#[allow(dead_code)]
 pub struct SyncEngineHandle {
     pub shutdown: tokio::sync::watch::Sender<bool>,
     pub join: tokio::task::JoinHandle<()>,
@@ -57,7 +58,7 @@ pub struct SyncEngineHandle {
 impl SyncEngine {
     pub fn new(app: AppHandle, config: Arc<RwLock<Config>>) -> Arc<Self> {
         let api = Arc::new(ApiClient::new(config.clone()));
-        let ws = Arc::new(WebSocketClient::new(config.clone(), api.clone()));
+        let ws = Arc::new(WebSocketClient::new(api.clone()));
         let peers = Arc::new(PeerManager::new(config.clone(), api.clone()));
         let (shutdown, _) = tokio::sync::watch::channel(false);
 
@@ -526,6 +527,7 @@ impl SyncEngine {
         Ok(())
     }
 
+    #[allow(dead_code)]
     pub async fn shutdown(&self) {
         let _ = self.shutdown.send(true);
         self.ws.disconnect().await;

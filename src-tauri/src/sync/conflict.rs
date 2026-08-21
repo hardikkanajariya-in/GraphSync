@@ -79,12 +79,3 @@ pub fn apply_remote_delete_with_conflict_check(
     filesystem::delete_file(root, relative)?;
     Ok(false)
 }
-
-pub fn operation_label(op: FileOperation) -> &'static str {
-    match op {
-        FileOperation::Create => "CREATE",
-        FileOperation::Update => "UPDATE",
-        FileOperation::Delete => "DELETE",
-        FileOperation::Rename => "RENAME",
-    }
-}

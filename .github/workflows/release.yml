@@ -204,7 +204,7 @@ jobs:
             - These are unsigned community builds. Windows SmartScreen and macOS Gatekeeper may show a warning on first install.
 
             The docs site is deployed separately on Vercel. See the [README](https://github.com/${{ github.repository }}/blob/main/README.md) for setup instructions.
-          releaseDraft: false
+          releaseDraft: true
           prerelease: ${{ needs.prepare.outputs.prerelease }}
           includeUpdaterJson: true
           args: ${{ matrix.args }}
@@ -217,3 +217,16 @@ jobs:
           path: |
             src-tauri/target/release/bundle/**/*
             src-tauri/target/${{ matrix.target }}/release/bundle/**/*
+
+  publish:
+    needs: [prepare, build]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Publish draft release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ needs.prepare.outputs.tag }}
+        run: |
+          gh release edit "$TAG" --draft=false --repo "$GITHUB_REPOSITORY"
